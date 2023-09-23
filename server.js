@@ -9,14 +9,22 @@ const cookieParser = require('cookie-parser')
 
 app.use(bodyParser.json());
 app.use(cookieParser(""));
+app.use(cors());
+
+
+app.get('/', (req, res, next)=>{
+    console.log('base req');
+    return res.json(200);
+})
 
 const orderRouter = require("./src/routes/order.route");
+const userRouter = require("./src/routes/user.route");
+const purchaseRouter = require("./src/routes/purchase.route")
+
 app.use("/api/orders", orderRouter);
+app.use("/api/users", userRouter);
+app.use("/api/purchase", purchaseRouter);
 
-
-
-
-app.use(cors());
 const URL = `mongodb+srv://abhikhya:ashi3666@crud.yjywtf4.mongodb.net/dummyDatabase?retryWrites=true&w=majority`
     try {
         mongoose.connect(URL);
@@ -33,4 +41,3 @@ const port = 5000;
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
-

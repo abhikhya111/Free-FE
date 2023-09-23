@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const orderSchema = new mongoose.Schema({
     
     id: {
-        type: String,
-        required: true
+        type: Number,
     },
     date: {
        type: Date, 
@@ -29,6 +28,9 @@ const orderSchema = new mongoose.Schema({
         type: String
     },
     orderType:{
+        type: String
+    },
+    quantity: {
         type: String
     },
     approvalStatus: {

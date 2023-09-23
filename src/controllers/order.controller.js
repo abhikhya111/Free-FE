@@ -1,13 +1,13 @@
 const OrderModel = require("../models/order.model");
-
+const PurchaseModel = require("../models/purchase.model");
 
 exports.placeOrder = async (req, res, next) => {
-    const { id, productName, rate, bardanas, brokerage, deliveryTime, firmName, orderType
+    const { id, productName, rate, bardanas, brokerage, deliveryTime, firmName, orderType, quantity
     } = req.body;
-    
+    const myId = Math.floor(Math.random() * 100)
     try {
         const order = await OrderModel.create({
-            id,
+            id: myId,
             date: Date.now(),
             productName,
             rate,
@@ -16,9 +16,18 @@ exports.placeOrder = async (req, res, next) => {
             deliveryTime,
             firmName,
             orderType,
+            quantity,
             approvalStatus: false
         });
-        res.status(201).json({ data: order, status: "success" });
+        const purchase = await PurchaseModel.create({
+            id: myId,
+            voucherId: Math.floor(Math.random() * 100),
+            productName: productName,
+            date: Date.now(),
+            party: "Party",
+            metCenter: "Center"
+        });
+        res.status(201).json({ data: order, purchase, status: "success" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
