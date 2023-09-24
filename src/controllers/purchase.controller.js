@@ -17,3 +17,20 @@ exports.viewPurchase = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 }
+
+exports.createPurchase = async (req, res) => {
+    try{
+        const purchaseDetails = req.body;
+        const id = req.params.id;
+        const purchase = await PurchaseModel.findOneAndUpdate(
+            {id: id},
+            { $push: { voucher: {
+                voucherId: req.body.voucherId
+             }}}
+            );
+        res.status(201).json({ data: purchase, status: "success" });
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}

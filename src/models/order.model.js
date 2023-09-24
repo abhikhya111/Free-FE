@@ -35,7 +35,12 @@ const orderSchema = new mongoose.Schema({
     },
     approvalStatus: {
         type: Boolean
-    }
+    },
+    voucherId:{
+        type: String
+    },
+    voucher: Array
+    
 })
 
 module.exports = mongoose.model("Order", orderSchema);

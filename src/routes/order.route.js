@@ -5,7 +5,8 @@ const {
     viewOrder,
     editOrder,
     approveOrder,
-    disapproveOrder
+    disapproveOrder,
+    purchaseVoucher
   } = require("../controllers/order.controller");
   const router = express.Router();
 
@@ -16,6 +17,7 @@ router.route("/:orderId").post(editOrder);
 
 router.route("/approveOrder/:id").post(approveOrder);
 router.route("/disapproveOrder/:id").post(disapproveOrder);
+router.route("/createVoucher/:id").post(purchaseVoucher);
 
 module.exports = router;
 

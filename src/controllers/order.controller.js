@@ -4,7 +4,9 @@ const PurchaseModel = require("../models/purchase.model");
 exports.placeOrder = async (req, res, next) => {
     const { id, productName, rate, bardanas, brokerage, deliveryTime, firmName, orderType, quantity
     } = req.body;
-    const myId = Math.floor(Math.random() * 100)
+    const myId = Math.floor(Math.random() * 100);
+    const voucherId = Math.floor(Math.random() * 100);
+
     try {
         const order = await OrderModel.create({
             id: myId,
@@ -17,17 +19,18 @@ exports.placeOrder = async (req, res, next) => {
             firmName,
             orderType,
             quantity,
-            approvalStatus: false
+            approvalStatus: false,
+            voucherId:voucherId
         });
-        const purchase = await PurchaseModel.create({
-            id: myId,
-            voucherId: Math.floor(Math.random() * 100),
-            productName: productName,
-            date: Date.now(),
-            party: "Party",
-            metCenter: "Center"
-        });
-        res.status(201).json({ data: order, purchase, status: "success" });
+        // const purchase = await PurchaseModel.create({
+        //     id: myId,
+        //     voucherId: Math.floor(Math.random() * 100),
+        //     productName: productName,
+        //     date: Date.now(),
+        //     party: "Party",
+        //     metCenter: "Center"
+        // });
+        res.status(201).json({ data: order, status: "success" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -135,4 +138,38 @@ exports.disapproveOrder = async (req, res, next) => {
         res.status(500).json({ error: error.message });
     }
     
+}
+
+
+exports.purchaseVoucher = async (req, res, next) => {
+    
+    try{
+        const id = req.params.id;
+        const orders = await OrderModel.findOne({id: id})
+
+    if (orders) {
+      const purchaseDetails = await OrderModel.findOneAndUpdate(
+        {id: id},
+        { $push: { voucher: {
+          productName:req.body.productName,
+          quantity:req.body.quantity,
+          unit:req.body.unit,
+          price:req.body.price,
+        } 
+      } 
+    },
+        {new: true} );
+        res.status(201).json({ data: purchaseDetails, status: "success" });
+
+    }
+        // if(orders.length > 0){
+        //     res.status(201).json({ data: orders, status: "success" });
+        // }
+        // else{
+        //     res.json({ message: "No orders found" });
+        // }
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
 }
