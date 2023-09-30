@@ -150,24 +150,108 @@ exports.purchaseVoucher = async (req, res, next) => {
     if (orders) {
       const purchaseDetails = await OrderModel.findOneAndUpdate(
         {id: id},
-        { $push: { voucher: {
-          productName:req.body.productName,
-          quantity:req.body.quantity,
-          unit:req.body.unit,
-          price:req.body.price,
-        } 
-      } 
+        {  voucher: req.body
     },
         {new: true} );
         res.status(201).json({ data: purchaseDetails, status: "success" });
 
     }
-        // if(orders.length > 0){
-        //     res.status(201).json({ data: orders, status: "success" });
-        // }
-        // else{
-        //     res.json({ message: "No orders found" });
-        // }
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+
+exports.voucherDeductions = async (req, res, next) => {
+    
+    try{
+        const id = req.params.id;
+        const orders = await OrderModel.findOne({id: id})
+
+    if (orders) {
+      const deductionDetails = await OrderModel.findOneAndUpdate(
+        {id: id},
+        {deductions: req.body
+    },
+        {new: true} );
+        res.status(201).json({ data: deductionDetails, status: "success" });
+
+    }
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+
+exports.addOptionalFields = async (req, res, next) => {
+    
+    try{
+        const id = req.params.id;
+        const orders = await OrderModel.findOne({id: id})
+
+    if (orders) {
+      const purchaseDetails = await OrderModel.findOneAndUpdate(
+        {id: id},
+        {  optionalFields: req.body
+    },
+        {new: true} );
+        res.status(201).json({ data: purchaseDetails, status: "success" });
+
+    }
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+exports.viewOptionalFields = async (req, res, next) => {
+    
+    try{
+        const id = req.params.id;
+        const orders = await OrderModel.findOne({id: id})
+
+   
+        res.status(201).json({ data: orders.optionalFields, status: "success" });
+
+    
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+exports.addItem = async (req, res, next) => {
+    
+    try{
+        const id = req.params.id;
+        const orders = await OrderModel.findOne({id: id})
+
+    if (orders) {
+      const purchaseDetails = await OrderModel.findOneAndUpdate(
+        {id: id},
+        {  items: req.body
+    },
+        {new: true} );
+        res.status(201).json({ data: purchaseDetails, status: "success" });
+
+    }
+    }
+    catch(error){
+        res.status(500).json({ error: error.message });
+    }
+}
+
+
+exports.viewItems = async (req, res, next) => {
+    
+    try{
+        const id = req.params.id;
+        const orders = await OrderModel.findOne({id: id})
+
+   
+        res.status(201).json({ data: orders.items, status: "success" });
+
+    
     }
     catch(error){
         res.status(500).json({ error: error.message });

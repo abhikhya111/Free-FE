@@ -39,7 +39,10 @@ const orderSchema = new mongoose.Schema({
     voucherId:{
         type: String
     },
-    voucher: Array
+    voucher: Array,
+    optionalFields: Array,
+    items: Array,
+    deductions: Object
     
 })
 
